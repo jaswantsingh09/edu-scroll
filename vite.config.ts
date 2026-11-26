@@ -6,6 +6,8 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      // PREVIEW=1 builds a single-page preview without a service worker
+      disable: !!process.env.PREVIEW,
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
