@@ -18,6 +18,11 @@ export function QuizCardView({ card, onAnswer }: { card: QuizCard; onAnswer: (co
       <div className="quiz-inner">
         <span className="chip">⚡ Quick quiz · {topic.name}</span>
         <h2 className="quiz-q">{card.question}</h2>
+        {card.code && (
+          <pre className="code quiz-code">
+            <code>{card.code}</code>
+          </pre>
+        )}
         <div className="quiz-options">
           {card.options.map((opt, i) => {
             const state = !answered ? '' : i === card.answer ? ' correct' : i === choice ? ' wrong' : ' dim';

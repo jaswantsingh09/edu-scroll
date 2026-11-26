@@ -11,9 +11,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'EduScroll — learn in reels',
+        name: 'EduScroll — dev skills in reels',
         short_name: 'EduScroll',
-        description: 'Scroll short, swipeable lessons on the topics you care about.',
+        description: 'Swipeable DSA, system design and full-stack lessons with quick quizzes.',
         theme_color: '#0b0b12',
         background_color: '#0b0b12',
         display: 'standalone',

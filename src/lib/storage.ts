@@ -1,4 +1,4 @@
-import type { Card, TopicId } from '../data/topics';
+import { TOPICS, type Card, type TopicId } from '../data/topics';
 
 const KEY = 'eduscroll:v1';
 
@@ -34,7 +34,18 @@ export function load(): AppState {
     const raw = localStorage.getItem(KEY);
     if (!raw) return defaultState;
     const parsed = JSON.parse(raw);
-    return { ...defaultState, ...parsed, stats: { ...defaultState.stats, ...parsed.stats } };
+    // Drop topics/cards from older versions that no longer exist.
+    const valid = new Set<string>(TOPICS.map((t) => t.id));
+    const topics = (parsed.topics ?? []).filter((t: string) => valid.has(t));
+    const saved = (parsed.saved ?? []).filter((c: Card) => valid.has(c.topic));
+    return {
+      ...defaultState,
+      ...parsed,
+      topics,
+      saved,
+      onboarded: !!parsed.onboarded && topics.length > 0,
+      stats: { ...defaultState.stats, ...parsed.stats },
+    };
   } catch {
     return defaultState;
   }

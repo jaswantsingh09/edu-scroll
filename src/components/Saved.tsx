@@ -14,6 +14,7 @@ export function Saved({ saved, onRemove }: { saved: Card[]; onRemove: (c: Card) 
             const t = topicById(c.topic);
             const title = c.kind === 'fact' ? c.title : c.question;
             const body = c.kind === 'fact' ? c.body : `${c.options[c.answer]} — ${c.explain ?? ''}`;
+            const code = c.code;
             const isOpen = open === c.id;
             return (
               <li key={c.id} className="saved-item" style={{ '--c1': t.colors[0], '--c2': t.colors[1] } as React.CSSProperties}>
@@ -24,6 +25,11 @@ export function Saved({ saved, onRemove }: { saved: Card[]; onRemove: (c: Card) 
                 {isOpen && (
                   <div className="saved-body">
                     <p>{body}</p>
+                    {code && (
+                      <pre className="code">
+                        <code>{code}</code>
+                      </pre>
+                    )}
                     <div className="saved-actions">
                       {c.kind === 'fact' && c.url && (
                         <a href={c.url} target="_blank" rel="noreferrer">

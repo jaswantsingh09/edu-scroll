@@ -40,7 +40,7 @@ export function Profile({ stats, topics, savedCount, onTopics, onReset }: Props)
         </div>
       </div>
 
-      <h3>Your topics</h3>
+      <h3>Your tracks</h3>
       <TopicPicker selected={draft} onChange={setDraft} />
       {dirty && (
         <button className="btn-primary sticky-save" onClick={() => onTopics(draft)}>

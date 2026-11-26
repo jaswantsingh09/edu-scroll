@@ -46,7 +46,7 @@ export function FactCardView({ card, liked, saved, onLike, onSave }: Props) {
           <div className="card-bg-img" style={{ backgroundImage: `url("${card.image}")` }} />
           <img className="card-img" src={card.image} alt="" loading="lazy" />
         </>
-      ) : (
+      ) : card.code ? null : (
         <div className="card-emoji" aria-hidden>
           {topic.emoji}
         </div>
@@ -59,7 +59,7 @@ export function FactCardView({ card, liked, saved, onLike, onSave }: Props) {
         </div>
       )}
 
-      <div className="card-content">
+      <div className={`card-content${card.code ? ' has-code' : ''}`}>
         <span className="chip">
           {topic.emoji} {topic.name}
         </span>
@@ -74,6 +74,11 @@ export function FactCardView({ card, liked, saved, onLike, onSave }: Props) {
         >
           {card.body}
         </p>
+        {card.code && (
+          <pre className="code" onClick={(e) => e.stopPropagation()}>
+            <code>{card.code}</code>
+          </pre>
+        )}
         <span className="card-source">Source: {card.source}</span>
       </div>
 

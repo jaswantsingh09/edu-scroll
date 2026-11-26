@@ -106,15 +106,15 @@ a { color: inherit; }
 .onboard-footer { position: sticky; bottom: 0; padding-top: 16px; margin-top: auto; background: linear-gradient(transparent, var(--bg) 30%); }
 
 /* Topic picker */
-.topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.topic-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 .topic-tile {
   position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 16px;
-  min-height: 96px;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 48px 18px 16px;
+  min-height: 92px;
   border-radius: 18px;
   text-align: left;
   background: var(--panel);
@@ -124,7 +124,11 @@ a { color: inherit; }
 .topic-tile:active { transform: scale(0.97); }
 .topic-tile.on { background: linear-gradient(140deg, var(--c1), var(--c2)); border-color: rgba(255, 255, 255, 0.6); }
 .topic-emoji { font-size: 30px; }
-.topic-name { font-weight: 650; }
+.topic-emoji { flex: none; }
+.topic-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.topic-name { font-weight: 700; font-size: 1.1rem; }
+.topic-blurb { font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); line-height: 1.35; }
+.topic-check { top: 50% !important; transform: translateY(-50%); right: 14px !important; }
 .topic-check {
   position: absolute;
   top: 10px;
@@ -218,7 +222,21 @@ a { color: inherit; }
 }
 @keyframes float { 50% { transform: translateY(-14px) rotate(-3deg); } }
 .card-shade { position: absolute; inset: 0; background: linear-gradient(transparent 35%, rgba(0, 0, 0, 0.85)); }
-.card-content { position: absolute; left: 16px; right: 84px; bottom: 20px; }
+.card-content { position: absolute; left: 16px; right: 84px; bottom: 20px; max-height: calc(100% - 120px); overflow-y: auto; scrollbar-width: none; }
+.card-content.has-code { right: 76px; }
+.code {
+  margin: 0 0 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font: 0.78rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: #e6edf3;
+  overflow-x: auto;
+  white-space: pre;
+  user-select: text;
+}
+.quiz-code { margin: -8px 0 18px; }
 .chip {
   display: inline-block;
   padding: 5px 10px;
@@ -241,7 +259,8 @@ a { color: inherit; }
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.card-body.expanded { -webkit-line-clamp: unset; max-height: 45vh; overflow-y: auto; }
+.card-body.expanded { -webkit-line-clamp: unset; }
+.has-code .card-body { -webkit-line-clamp: 5; }
 .card-source { font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); }
 .rail { position: absolute; right: 8px; bottom: 28px; display: flex; flex-direction: column; gap: 18px; align-items: center; }
 .rail-btn {

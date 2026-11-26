@@ -1,19 +1,10 @@
-export type TopicId =
-  | 'space'
-  | 'body'
-  | 'history'
-  | 'psychology'
-  | 'money'
-  | 'physics'
-  | 'coding'
-  | 'nature'
-  | 'geography'
-  | 'art';
+export type TopicId = 'dsa' | 'sysdesign' | 'fullstack';
 
 export interface Topic {
   id: TopicId;
   name: string;
   emoji: string;
+  blurb: string;
   /** two-stop gradient used for card backgrounds */
   colors: [string, string];
   /** Wikipedia search queries used to generate endless content for this topic */
@@ -27,6 +18,8 @@ export interface FactCard {
   title: string;
   hook?: string;
   body: string;
+  /** optional short code snippet shown in a monospace block */
+  code?: string;
   image?: string;
   url?: string;
   source?: string;
@@ -37,6 +30,8 @@ export interface QuizCard {
   id: string;
   topic: TopicId;
   question: string;
+  /** optional code shown with the question */
+  code?: string;
   options: string[];
   answer: number;
   explain?: string;
@@ -46,94 +41,81 @@ export type Card = FactCard | QuizCard;
 
 export const TOPICS: Topic[] = [
   {
-    id: 'space',
-    name: 'Space',
-    emoji: '🪐',
-    colors: ['#1b1464', '#6a11cb'],
-    queries: ['planet', 'galaxy', 'nebula', 'space mission', 'exoplanet', 'black hole', 'moon of Jupiter', 'astronomer'],
+    id: 'dsa',
+    name: 'DSA',
+    emoji: '🧮',
+    blurb: 'Data structures, algorithms, Big-O and interview patterns',
+    colors: ['#1a2a6c', '#4361ee'],
+    queries: [
+      'sorting algorithm',
+      'graph traversal algorithm',
+      'tree data structure',
+      'hash table',
+      'dynamic programming problem',
+      'string-searching algorithm',
+      'shortest path algorithm',
+      'heap data structure',
+      'abstract data type',
+    ],
   },
   {
-    id: 'body',
-    name: 'Human Body',
-    emoji: '🫀',
-    colors: ['#8e0e00', '#e94057'],
-    queries: ['human anatomy organ', 'hormone', 'immune system', 'human brain region', 'bone human skeleton', 'vitamin'],
+    id: 'sysdesign',
+    name: 'System Design',
+    emoji: '🏗️',
+    blurb: 'Scaling, caching, databases, queues and distributed systems',
+    colors: ['#3a0b52', '#b5179e'],
+    queries: [
+      'distributed computing',
+      'consistency model',
+      'load balancing computing',
+      'database replication',
+      'cache computing',
+      'message queue',
+      'consensus algorithm distributed',
+      'content delivery network',
+      'database sharding partition',
+    ],
   },
   {
-    id: 'history',
-    name: 'History',
-    emoji: '🏛️',
-    colors: ['#5c3d0e', '#c79a3a'],
-    queries: ['ancient civilization', 'empire history', 'medieval battle', 'archaeological site', 'revolution history', 'ancient city'],
-  },
-  {
-    id: 'psychology',
-    name: 'Psychology',
-    emoji: '🧠',
-    colors: ['#3a1c71', '#d76d77'],
-    queries: ['cognitive bias', 'psychological effect', 'psychology experiment', 'memory psychology', 'social psychology phenomenon'],
-  },
-  {
-    id: 'money',
-    name: 'Money',
-    emoji: '💸',
-    colors: ['#0f5132', '#2bb673'],
-    queries: ['economic concept', 'personal finance', 'stock market', 'financial crisis', 'currency history', 'investment strategy'],
-  },
-  {
-    id: 'physics',
-    name: 'Physics',
-    emoji: '⚛️',
-    colors: ['#003973', '#00a6c4'],
-    queries: ['physics phenomenon', 'quantum mechanics', 'thermodynamics', 'physical law', 'particle physics', 'optics phenomenon'],
-  },
-  {
-    id: 'coding',
-    name: 'Coding',
-    emoji: '💻',
-    colors: ['#141e30', '#3a7bd5'],
-    queries: ['programming language', 'algorithm', 'data structure', 'software design pattern', 'computer science concept'],
-  },
-  {
-    id: 'nature',
-    name: 'Animals & Nature',
-    emoji: '🐙',
-    colors: ['#134e5e', '#71b280'],
-    queries: ['animal behavior', 'deep sea creature', 'endangered species', 'bird species', 'insect', 'rainforest plant'],
-  },
-  {
-    id: 'geography',
-    name: 'Geography',
-    emoji: '🌍',
-    colors: ['#0b486b', '#f56217'],
-    queries: ['island nation', 'mountain range', 'river', 'desert', 'volcano', 'unusual border'],
-  },
-  {
-    id: 'art',
-    name: 'Art & Culture',
-    emoji: '🎨',
-    colors: ['#4a00e0', '#ff6a88'],
-    queries: ['famous painting', 'art movement', 'sculpture', 'architect', 'renaissance artist', 'mythology'],
+    id: 'fullstack',
+    name: 'Full-Stack Dev',
+    emoji: '🌐',
+    blurb: 'HTTP, APIs, frontend, backend, databases and web security',
+    colors: ['#004d40', '#0f9d76'],
+    queries: [
+      'Hypertext Transfer Protocol',
+      'web framework',
+      'JavaScript library',
+      'representational state transfer',
+      'web application security vulnerability',
+      'SQL database',
+      'cascading style sheets',
+      'authentication protocol web',
+      'web browser engine',
+    ],
   },
 ];
 
 export const topicById = (id: TopicId) => TOPICS.find((t) => t.id === id)!;
 
-const f = (topic: TopicId, n: number, title: string, hook: string, body: string): FactCard => ({
+let n = 0;
+const f = (topic: TopicId, title: string, hook: string, body: string, code?: string): FactCard => ({
   kind: 'fact',
-  id: `c-${topic}-${n}`,
+  id: `c-${topic}-${++n}`,
   topic,
   title,
   hook,
   body,
+  code,
   source: 'EduScroll',
 });
 
-const q = (topic: TopicId, n: number, question: string, options: string[], answer: number, explain: string): QuizCard => ({
+const q = (topic: TopicId, question: string, options: string[], answer: number, explain: string, code?: string): QuizCard => ({
   kind: 'quiz',
-  id: `q-${topic}-${n}`,
+  id: `q-${topic}-${++n}`,
   topic,
   question,
+  code,
   options,
   answer,
   explain,
@@ -141,83 +123,217 @@ const q = (topic: TopicId, n: number, question: string, options: string[], answe
 
 /** Hand-written starter content. Endless content is pulled from Wikipedia on top of this. */
 export const CURATED: Card[] = [
-  // Space
-  f('space', 1, 'A day on Venus is longer than its year', 'Venus spins painfully slowly.', 'Venus takes about 243 Earth days to rotate once, but only about 225 Earth days to orbit the Sun. It also spins backwards compared with most planets, so the Sun rises in the west.'),
-  f('space', 2, 'Neutron stars are absurdly dense', 'A teaspoon would weigh billions of tonnes.', 'When a massive star collapses, its core can crush into a neutron star about 20 km across with more mass than the Sun. A sugar-cube-sized piece would weigh roughly as much as all of humanity.'),
-  f('space', 3, 'You are looking at the past', 'Light takes time to reach you.', 'Sunlight is about 8 minutes old when it hits your eyes. Light from the Andromeda Galaxy left it about 2.5 million years ago — before modern humans existed.'),
-  f('space', 4, 'Footprints on the Moon could last millions of years', 'No wind, no rain.', 'The Moon has almost no atmosphere, so there is no weather to erase the Apollo astronauts’ bootprints. Micrometeorite impacts will slowly wear them away, but only over enormous timescales.'),
-  q('space', 1, 'Which planet has the most known moons (as of the mid-2020s)?', ['Jupiter', 'Saturn', 'Uranus', 'Neptune'], 1, 'Saturn overtook Jupiter after waves of new small moons were confirmed in 2023 and 2025 — it now has well over 200.'),
-  q('space', 2, 'Roughly how long does sunlight take to reach Earth?', ['8 seconds', '8 minutes', '8 hours', '8 days'], 1, 'At ~150 million km away, light needs about 8 minutes 20 seconds.'),
+  // ───────────── DSA ─────────────
+  f('dsa', 'Big-O is about growth, not speed', 'How cost scales as input grows.',
+    'O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2ⁿ). With a million items, an O(n log n) sort does ~20 million steps; an O(n²) one does ~a trillion. Drop constants and lower-order terms: O(3n + 5) is just O(n).'),
+  f('dsa', 'Two pointers on a sorted array', 'Turn O(n²) pair search into O(n).',
+    'Start one pointer at each end. If the sum is too small, move the left pointer right; too big, move the right pointer left. Each step discards a candidate, so you finish in one pass.',
+    `def pair_sum(a, target):
+    i, j = 0, len(a) - 1
+    while i < j:
+        s = a[i] + a[j]
+        if s == target: return i, j
+        if s < target: i += 1
+        else: j -= 1`),
+  f('dsa', 'Two Sum with a hash map', 'The classic O(n) trick.',
+    'For each number, check whether its complement (target − x) was already seen. A hash map gives O(1) average lookups, so the whole scan is O(n) time and O(n) space.',
+    `def two_sum(nums, target):
+    seen = {}
+    for i, x in enumerate(nums):
+        if target - x in seen:
+            return seen[target - x], i
+        seen[x] = i`),
+  f('dsa', 'Sliding window', 'For "longest/shortest subarray or substring" problems.',
+    'Keep a window [left, right]. Expand right to include new elements; shrink left while the window breaks the rule. Every element enters and leaves at most once, so it is O(n).',
+    `def longest_unique(s):
+    last, left, best = {}, 0, 0
+    for right, ch in enumerate(s):
+        if last.get(ch, -1) >= left:
+            left = last[ch] + 1
+        last[ch] = right
+        best = max(best, right - left + 1)
+    return best`),
+  f('dsa', 'Binary search: get the boundaries right', 'Most bugs are off-by-one.',
+    'Pick one convention and stick to it. With a half-open range [lo, hi), loop while lo < hi and set hi = mid when going left. You can also binary search on the answer itself: "smallest capacity that works" is a monotonic yes/no question.',
+    `def lower_bound(a, x):
+    lo, hi = 0, len(a)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if a[mid] < x: lo = mid + 1
+        else: hi = mid
+    return lo`),
+  f('dsa', 'Monotonic stack', 'Next greater element in O(n).',
+    'Keep a stack of indices whose values are decreasing. When a bigger value arrives, pop everything smaller: the new value is their "next greater". Each index is pushed and popped once.'),
+  f('dsa', 'BFS finds shortest paths (unweighted)', 'Queue = level by level.',
+    'Breadth-first search explores nodes in order of distance from the start, so the first time you reach a node is via a shortest path, as long as every edge has the same weight. DFS does not give you this guarantee.',
+    `from collections import deque
+def bfs(graph, start):
+    dist = {start: 0}
+    q = deque([start])
+    while q:
+        u = q.popleft()
+        for v in graph[u]:
+            if v not in dist:
+                dist[v] = dist[u] + 1
+                q.append(v)
+    return dist`),
+  f('dsa', 'Dijkstra needs non-negative weights', 'Greedy plus a priority queue.',
+    'Dijkstra always expands the closest unvisited node. With a binary heap it runs in O((V + E) log V). Negative edge weights break the greedy assumption; use Bellman–Ford (O(V·E)) instead, which can also detect negative cycles.'),
+  f('dsa', 'Dynamic programming = recursion + memory', 'Overlapping subproblems + optimal substructure.',
+    'Naive recursive Fibonacci recomputes the same values and takes O(2ⁿ). Caching each result makes it O(n). Then you can turn it bottom-up and often keep just the last few values.',
+    `from functools import cache
+@cache
+def fib(n):
+    return n if n < 2 else fib(n - 1) + fib(n - 2)`),
+  f('dsa', 'Top-K with a heap of size K', 'Don’t sort everything.',
+    'To get the K largest items from n, keep a min-heap of size K. Push each item and pop the smallest when the heap grows past K. That is O(n log K), much better than O(n log n) when K is small.',
+    `import heapq
+def top_k(nums, k):
+    h = []
+    for x in nums:
+        heapq.heappush(h, x)
+        if len(h) > k: heapq.heappop(h)
+    return h`),
+  f('dsa', 'Comparison sorts can’t beat n log n', 'A provable lower bound.',
+    'Any sort that only compares elements needs Ω(n log n) comparisons in the worst case. Counting sort and radix sort avoid comparisons and can run in O(n + k) when keys are small integers.'),
+  f('dsa', 'Tries make prefix search fast', 'Autocomplete’s favourite structure.',
+    'A trie stores strings character by character along a tree. Looking up a word or any prefix costs O(L), where L is its length, no matter how many words are stored.'),
+  f('dsa', 'Union-Find is nearly O(1)', 'Path compression + union by rank.',
+    'Disjoint-set union tracks connected groups. With both optimisations, each operation runs in amortised O(α(n)), where α is the inverse Ackermann function, which is at most 4 for any realistic n. It is great for Kruskal’s MST and "number of islands" style problems.'),
+  f('dsa', 'Topological sort orders dependencies', 'Only for DAGs.',
+    'Kahn’s algorithm repeatedly removes nodes with no incoming edges. If some nodes are never removed, the graph has a cycle. Build systems, course schedules and package managers all use this idea.'),
+  q('dsa', 'What is the time complexity of binary search on a sorted array?', ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'], 1,
+    'Each step halves the search space, so ~log₂ n steps.'),
+  q('dsa', 'Which data structure does BFS use to decide what to visit next?', ['Stack', 'Queue', 'Heap', 'Trie'], 1,
+    'A FIFO queue makes BFS explore level by level.'),
+  q('dsa', 'What is quicksort’s worst-case time complexity?', ['O(n)', 'O(n log n)', 'O(n²)', 'O(log n)'], 2,
+    'Consistently bad pivots (e.g. already-sorted input with first-element pivot) give O(n²). Random pivots make this very unlikely.'),
+  q('dsa', 'How do you detect a cycle in a linked list in O(1) extra space?', ['Hash set of visited nodes', 'Sort the nodes', 'Fast and slow pointers', 'Recursion'], 2,
+    'Floyd’s algorithm: if a fast pointer (2 steps) ever meets the slow pointer (1 step), there is a cycle.'),
+  q('dsa', 'What does this print?', ['3', '4', '5', '6'], 2,
+    'Memoised fib: fib(5) = 5.', `@cache
+def fib(n):
+    return n if n < 2 else fib(n-1) + fib(n-2)
+print(fib(5))`),
+  q('dsa', 'Average lookup time in a well-sized hash table is…', ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'], 0,
+    'Average O(1); worst case O(n) if many keys collide.'),
 
-  // Body
-  f('body', 1, 'Your stomach lining renews itself every few days', 'Acid would digest it otherwise.', 'Stomach acid is strong enough to dissolve metal over time. A protective mucus layer and rapidly replaced cells keep your stomach from digesting itself.'),
-  f('body', 2, 'You have more bacterial cells than you think', 'Roughly one-to-one.', 'The old claim was 10 bacteria for every human cell. Newer estimates put it closer to 1:1 — around 38 trillion bacteria alongside ~30 trillion human cells.'),
-  f('body', 3, 'Your brain runs on about 20 watts', 'Less than a light bulb.', 'Despite being ~2% of body weight, the brain uses about 20% of your resting energy — yet that’s only around 20 watts of power.'),
-  f('body', 4, 'Bones are stronger than steel — by weight', 'Light, flexible, self-repairing.', 'Pound for pound, bone can resist compression better than many steels, and unlike steel it constantly rebuilds itself. Your skeleton is largely replaced over roughly a decade.'),
-  q('body', 1, 'Which is the largest organ of the human body?', ['Liver', 'Brain', 'Skin', 'Lungs'], 2, 'Skin covers about 2 square metres and makes up roughly 15% of body weight.'),
-  q('body', 2, 'Which blood cells carry oxygen?', ['White blood cells', 'Red blood cells', 'Platelets', 'Plasma cells'], 1, 'Red blood cells are packed with haemoglobin, which binds oxygen.'),
+  // ───────────── System Design ─────────────
+  f('sysdesign', 'Latency numbers to know', 'Orders of magnitude matter.',
+    'Roughly: L1 cache ~1 ns · main memory ~100 ns · SSD random read ~100 µs · round trip in a datacenter ~0.5 ms · disk seek ~10 ms · California ↔ Europe round trip ~150 ms. Memory is ~1,000× faster than SSD, and the network is often the bottleneck.'),
+  f('sysdesign', 'Back-of-the-envelope: requests per second', '1 million per day ≈ 12 per second.',
+    'A day has 86,400 seconds. So 1M requests/day ≈ 12 req/s on average, and 100M/day ≈ 1,200 req/s. Peak traffic is often 2–10× the average, so size for the peak.'),
+  f('sysdesign', 'The CAP theorem, precisely', 'It’s about partitions.',
+    'When a network partition happens, a distributed system must choose between Consistency (every read sees the latest write) and Availability (every request gets a response). PACELC adds: Else, when there’s no partition, you trade Latency against Consistency.'),
+  f('sysdesign', 'Scale up vs scale out', 'Vertical vs horizontal.',
+    'Vertical scaling means a bigger machine: simple, but there is a ceiling and a single point of failure. Horizontal scaling means more machines: practically unlimited, but you need load balancing, stateless services and data partitioning.'),
+  f('sysdesign', 'Load balancers: L4 vs L7', 'Packets or requests?',
+    'L4 balancers route by IP/port and are fast and protocol-agnostic. L7 balancers understand HTTP, so they can route by path, header or cookie, terminate TLS and retry. Common algorithms: round robin, least connections, and hashing for stickiness.'),
+  f('sysdesign', 'Caching patterns', 'Cache-aside is the default.',
+    'Cache-aside: the app reads the cache and on a miss loads from the DB and fills the cache. Write-through: write the cache and the DB together. Write-back: write the cache and flush to the DB later (fast, but data can be lost). Always set a TTL and plan for invalidation.'),
+  f('sysdesign', 'Consistent hashing', 'Add a node, move only ~1/n keys.',
+    'With hash(key) % N, changing N remaps almost every key. Consistent hashing puts nodes and keys on a ring, and each key belongs to the next node clockwise. Adding or removing a node moves only its neighbours’ keys. Virtual nodes spread load evenly.'),
+  f('sysdesign', 'Leader–follower replication', 'Scale reads, survive failures.',
+    'Writes go to the leader and stream to followers, which serve reads. With asynchronous replication, followers lag, so a user might not see their own write. Fix this by reading your own recent writes from the leader.'),
+  f('sysdesign', 'Sharding splits data across databases', 'Choose the shard key carefully.',
+    'Partition rows by a key (user_id, region…). A good key spreads load evenly and keeps related data together. A bad key creates hot shards. Cross-shard joins and transactions become hard, and resharding later is painful.'),
+  f('sysdesign', 'Queues decouple services', 'And smooth traffic spikes.',
+    'Producers push messages and consumers process them at their own pace. Most queues give at-least-once delivery, so a message can arrive twice. Make consumers idempotent, for example by tracking processed message IDs.'),
+  f('sysdesign', 'Rate limiting with a token bucket', 'Allows short bursts.',
+    'A bucket holds up to B tokens and refills at R tokens per second. Each request spends one token, and when the bucket is empty, requests are rejected (HTTP 429). A leaky bucket instead drains at a constant rate for smoother output.',
+    `def allow(bucket, now):
+    elapsed = now - bucket.last
+    bucket.tokens = min(bucket.cap,
+                        bucket.tokens + elapsed * bucket.rate)
+    bucket.last = now
+    if bucket.tokens >= 1:
+        bucket.tokens -= 1
+        return True
+    return False`),
+  f('sysdesign', 'What the "nines" really mean', 'Downtime per year.',
+    '99% ≈ 3.65 days · 99.9% ≈ 8.8 hours · 99.99% ≈ 53 minutes · 99.999% ≈ 5 minutes. Services that depend on each other in series multiply their availability: two 99.9% services in a chain give about 99.8%.'),
+  f('sysdesign', 'Idempotency keys', 'Retry without double-charging.',
+    'Networks fail after the server has done the work. The client sends a unique Idempotency-Key with the request. The server stores the result under that key and returns it again for any retry instead of repeating the action.'),
+  f('sysdesign', 'URL shortener sizing', 'Base62 goes a long way.',
+    'With [a-zA-Z0-9] you have 62 symbols. Seven characters give 62⁷ ≈ 3.5 trillion codes. Generate them from an auto-increment ID or a distributed ID generator, store code → URL, and put a cache in front, since reads far outnumber writes.'),
+  f('sysdesign', 'CDNs bring content closer', 'Edge servers worldwide.',
+    'A CDN caches static assets (and sometimes API responses) at edge locations near users. This cuts latency and offloads the origin. Use cache-busting filenames (app.3f9a.js) so you can cache for a long time safely.'),
+  f('sysdesign', 'SQL or NoSQL?', 'Start from your access patterns.',
+    'Relational DBs give joins, transactions and flexible queries, and they suit most apps. Key-value and wide-column stores scale writes horizontally and handle huge, simple access patterns. Document stores fit nested, schema-flexible data. Many systems use both.'),
+  q('sysdesign', 'Roughly how much downtime per year does 99.99% availability allow?', ['~5 minutes', '~53 minutes', '~8.8 hours', '~3.6 days'], 1,
+    '0.01% of 525,600 minutes ≈ 53 minutes.'),
+  q('sysdesign', '1 million requests per day is about how many requests per second on average?', ['~1', '~12', '~120', '~1,000'], 1,
+    '1,000,000 ÷ 86,400 ≈ 11.6.'),
+  q('sysdesign', 'Your queue delivers at-least-once. What must consumers be?', ['Stateless', 'Idempotent', 'Synchronous', 'Single-threaded'], 1,
+    'Processing the same message twice must have the same effect as once.'),
+  q('sysdesign', 'What is the main benefit of consistent hashing?', ['Faster hash functions', 'Encrypts keys', 'Few keys move when nodes change', 'Guarantees strong consistency'], 2,
+    'Only about 1/n of keys are remapped when a node joins or leaves.'),
+  q('sysdesign', 'In CAP, a partition happens. A system that keeps answering with possibly stale data chose…', ['Consistency', 'Availability', 'Partition tolerance', 'Latency'], 1,
+    'It stayed available at the cost of consistency (an AP system).'),
+  q('sysdesign', 'Which rate limiter allows short bursts up to a cap?', ['Token bucket', 'Fixed window counter', 'Leaky bucket', 'Round robin'], 0,
+    'Tokens accumulate up to the bucket size, so a burst can spend them all at once.'),
 
-  // History
-  f('history', 1, 'Cleopatra lived closer to the Moon landing than to the Great Pyramid', 'Ancient Egypt was very long.', 'The Great Pyramid of Giza was built around 2560 BCE. Cleopatra lived around 69–30 BCE — about 2,500 years later. The Moon landing was ~2,000 years after her.'),
-  f('history', 2, 'Oxford University is older than the Aztec Empire', 'Timelines overlap in surprising ways.', 'Teaching at Oxford existed by 1096. Tenochtitlan, the Aztec capital, was founded in 1325.'),
-  f('history', 3, 'The shortest war lasted under an hour', 'The Anglo-Zanzibar War, 1896.', 'Britain and the Sultanate of Zanzibar fought a war that lasted roughly 38–45 minutes before Zanzibar surrendered.'),
-  f('history', 4, 'Romans used concrete that heals itself', 'Lime clasts are the secret.', 'Roman concrete contains small lumps of lime. When cracks let in water, the lime dissolves and recrystallises, sealing the crack — part of why some structures have stood for 2,000 years.'),
-  q('history', 1, 'Which empire built Machu Picchu?', ['Aztec', 'Maya', 'Inca', 'Olmec'], 2, 'The Inca built it in the 15th century, likely as an estate for emperor Pachacuti.'),
-  q('history', 2, 'In which year did the Berlin Wall fall?', ['1961', '1979', '1989', '1991'], 2, 'It fell on 9 November 1989.'),
-
-  // Psychology
-  f('psychology', 1, 'The spotlight effect', 'People notice you far less than you think.', 'In a famous study, students wearing an embarrassing T-shirt guessed about half the room would notice. Only around a quarter actually did.'),
-  f('psychology', 2, 'The Zeigarnik effect', 'Unfinished tasks stick in your head.', 'We tend to remember interrupted or incomplete tasks better than completed ones. Cliffhangers exploit this — and so can you: start a task for 2 minutes and your brain will nag you to finish it.'),
-  f('psychology', 3, 'Spaced repetition beats cramming', 'Forgetting is part of learning.', 'Reviewing material at increasing intervals (1 day, 3 days, a week…) produces far stronger long-term memory than the same time spent in one session.'),
-  f('psychology', 4, 'The Dunning–Kruger effect', 'Low skill can hide itself.', 'People with limited knowledge in a domain often overestimate their competence, partly because the skills needed to do something well are the same skills needed to judge it.'),
-  q('psychology', 1, 'Tending to favour information that supports what you already believe is called…', ['Anchoring', 'Confirmation bias', 'Hindsight bias', 'Halo effect'], 1, 'Confirmation bias shapes what we search for, notice and remember.'),
-  q('psychology', 2, 'Which learning technique is best supported for long-term retention?', ['Re-reading notes', 'Highlighting', 'Spaced retrieval practice', 'Cramming'], 2, 'Testing yourself, spaced over time, consistently outperforms passive review.'),
-
-  // Money
-  f('money', 1, 'Compound interest snowballs', 'Time matters more than amount.', 'At 7% a year, money doubles about every 10 years (the Rule of 72: 72 ÷ 7 ≈ 10). Investing early gives compounding more doubling periods to work.'),
-  f('money', 2, 'Inflation quietly shrinks cash', '3% a year adds up.', 'At 3% inflation, prices roughly double in 24 years. Cash under a mattress loses about half its purchasing power over that time.'),
-  f('money', 3, 'Index funds beat most stock pickers', 'Low fees, broad market.', 'Over 15-year periods, the large majority of actively managed US large-cap funds underperform the S&P 500 index after fees.'),
-  f('money', 4, 'The 50/30/20 budget', 'A simple starting rule.', 'Spend ~50% of after-tax income on needs, ~30% on wants, and ~20% on saving and paying down debt. Tweak the ratios to fit your life.'),
-  q('money', 1, 'Using the Rule of 72, how long to double money at 6% a year?', ['6 years', '12 years', '18 years', '72 years'], 1, '72 ÷ 6 = 12 years.'),
-  q('money', 2, 'What does diversification mainly reduce?', ['Fees', 'Taxes', 'Risk from any single investment', 'Inflation'], 2, 'Spreading money across many assets limits the damage any one can do.'),
-
-  // Physics
-  f('physics', 1, 'Time runs faster on a mountain', 'Gravity slows clocks.', 'General relativity predicts — and atomic clocks confirm — that clocks closer to Earth’s mass tick more slowly. GPS satellites must correct for this or drift by kilometres a day.'),
-  f('physics', 2, 'Atoms are almost entirely empty', 'If the nucleus were a marble…', '…the atom would be the size of a football stadium. Nearly all the mass sits in the tiny nucleus.'),
-  f('physics', 3, 'Hot water can freeze faster than cold', 'The Mpemba effect.', 'Under some conditions, warmer water appears to freeze first. Evaporation, convection and dissolved gases have been proposed as causes, and it’s still debated.'),
-  f('physics', 4, 'Why the sky is blue', 'Rayleigh scattering.', 'Air molecules scatter shorter (blue) wavelengths of sunlight much more than longer (red) ones, so blue light reaches your eyes from every direction of the sky.'),
-  q('physics', 1, 'What is the approximate speed of light in a vacuum?', ['300 km/s', '300,000 km/s', '3,000,000 km/s', '30,000 km/s'], 1, 'About 299,792 km per second.'),
-  q('physics', 2, 'Which force keeps planets in orbit around the Sun?', ['Magnetism', 'Friction', 'Gravity', 'The strong force'], 2, 'Gravity provides the centripetal pull for orbits.'),
-
-  // Coding
-  f('coding', 1, 'The first "computer bug" was a real moth', 'Harvard Mark II, 1947.', 'Engineers found a moth stuck in a relay and taped it into the log book: "First actual case of bug being found." The term "bug" for faults was already in use, but this made it famous.'),
-  f('coding', 2, 'Binary search halves the problem', 'O(log n) is powerful.', 'To find an item in a sorted list of 1 billion entries, binary search needs at most about 30 comparisons, because each step cuts the remaining range in half.'),
-  f('coding', 3, 'Hash maps trade memory for speed', 'Near-instant lookups.', 'A hash function turns a key into an array index, so lookups take roughly constant time on average no matter how many items you store.'),
-  f('coding', 4, 'Git stores snapshots, not diffs', 'Every commit is a full picture.', 'Each Git commit points to a tree representing the whole project. Unchanged files are just references to existing blobs, so it stays compact.'),
-  q('coding', 1, 'What does "HTML" stand for?', ['HyperText Markup Language', 'High Transfer Machine Language', 'Hyperlink Text Mode Layout', 'Home Tool Markup Language'], 0, 'HTML describes the structure of web pages.'),
-  q('coding', 2, 'Which data structure is Last-In, First-Out?', ['Queue', 'Stack', 'Linked list', 'Heap'], 1, 'A stack — like a pile of plates.'),
-
-  // Nature
-  f('nature', 1, 'Octopuses have three hearts', 'And blue blood.', 'Two hearts pump blood through the gills, one pumps it to the body. Their blood uses copper-based haemocyanin, which turns it blue.'),
-  f('nature', 2, 'Trees talk through fungi', 'The "wood wide web".', 'Mycorrhizal fungi connect tree roots underground, moving water, nutrients and chemical signals between plants. How much trees "help" each other this way is still actively researched.'),
-  f('nature', 3, 'Tardigrades can survive space', 'Tiny, nearly indestructible.', 'These half-millimetre animals can dry out into a dormant "tun" state and survive extreme cold, radiation and even the vacuum of space.'),
-  f('nature', 4, 'Crows recognise human faces', 'And they hold grudges.', 'In studies, crows remembered masks worn by researchers who trapped them and scolded those faces for years — even teaching other crows to do the same.'),
-  q('nature', 1, 'Which is the largest animal ever known to have lived?', ['African elephant', 'Blue whale', 'Argentinosaurus', 'Megalodon'], 1, 'Blue whales reach ~30 m and up to ~190 tonnes.'),
-  q('nature', 2, 'How do bees tell hive-mates where flowers are?', ['Scent trails only', 'A waggle dance', 'Buzzing pitch', 'They don’t'], 1, 'The angle and duration of the waggle dance encode direction and distance.'),
-
-  // Geography
-  f('geography', 1, 'Russia spans 11 time zones', 'Breakfast in the west, dinner in the east.', 'From Kaliningrad to Kamchatka, Russia stretches across 11 time zones — more than any other country’s contiguous territory.'),
-  f('geography', 2, 'Most of Canada’s people live near the US border', 'A thin ribbon of population.', 'Roughly two-thirds of Canadians live within about 100 km of the US border, largely because of climate and history.'),
-  f('geography', 3, 'Africa is enormous', 'Maps shrink it.', 'The Mercator projection inflates areas near the poles. Africa is about 30 million km² — big enough to fit the USA, China, India and much of Europe inside it.'),
-  f('geography', 4, 'The Dead Sea is the lowest land on Earth', 'Over 430 m below sea level.', 'Its shoreline is the lowest exposed land on the planet, and its water is so salty you float effortlessly.'),
-  q('geography', 1, 'Which is the longest river in South America?', ['Paraná', 'Orinoco', 'Amazon', 'Magdalena'], 2, 'The Amazon also carries more water than any other river on Earth.'),
-  q('geography', 2, 'Which country has the most natural lakes?', ['Finland', 'Canada', 'Russia', 'USA'], 1, 'Canada has over half of the world’s natural lakes.'),
-
-  // Art
-  f('art', 1, 'The Mona Lisa became famous after being stolen', '1911 heist.', 'An Italian handyman walked out of the Louvre with it. The two-year search made headlines worldwide and turned the painting into a global icon.'),
-  f('art', 2, 'Van Gogh sold very few paintings in his lifetime', 'Recognition came later.', 'Van Gogh produced around 900 paintings in about a decade but had little commercial success while alive; his fame grew after his death in 1890.'),
-  f('art', 3, 'Michelangelo painted the Sistine ceiling standing up', 'Not lying on his back.', 'He worked on a scaffold he designed, standing and craning his neck for about four years (1508–1512), and wrote a comic poem about the pain.'),
-  f('art', 4, 'Ultramarine was worth more than gold', 'Ground from lapis lazuli.', 'Renaissance blue pigment came from lapis mined in Afghanistan. It was so costly that contracts specified how much a painter could use — often reserved for the Virgin Mary’s robes.'),
-  q('art', 1, 'Who painted "The Starry Night"?', ['Claude Monet', 'Vincent van Gogh', 'Salvador Dalí', 'Edvard Munch'], 1, 'Van Gogh painted it in 1889 at the asylum in Saint-Rémy.'),
-  q('art', 2, 'Cubism was pioneered by Picasso and…', ['Georges Braque', 'Henri Matisse', 'Paul Cézanne', 'Joan Miró'], 0, 'Picasso and Braque developed Cubism around 1907–1914.'),
+  // ───────────── Full-Stack ─────────────
+  f('fullstack', '401 vs 403', 'Who are you vs you can’t do that.',
+    '401 Unauthorized really means unauthenticated: send credentials. 403 Forbidden means the server knows who you are but you lack permission. Other families: 2xx success, 3xx redirect, 4xx client error, 5xx server error.'),
+  f('fullstack', 'Which HTTP methods are idempotent?', 'Safe to retry.',
+    'GET, PUT, DELETE, HEAD and OPTIONS are idempotent: repeating them leaves the server in the same state. POST is not, since two POSTs can create two orders. PATCH may or may not be, depending on how it is designed.'),
+  f('fullstack', 'CORS is enforced by the browser', 'Not by your server.',
+    'Browsers block JS from reading cross-origin responses unless the server allows it with Access-Control-Allow-Origin. Non-simple requests (custom headers, JSON bodies, PUT/DELETE) trigger an OPTIONS preflight first. curl and backends ignore CORS entirely.'),
+  f('fullstack', 'The event loop: microtasks first', 'Why the logs come out in that order.',
+    'After the current script finishes, JS drains all microtasks (Promise callbacks, queueMicrotask) before the next macrotask (setTimeout, I/O, events). This prints A, D, C, B.',
+    `console.log('A');
+setTimeout(() => console.log('B'), 0);
+Promise.resolve().then(() => console.log('C'));
+console.log('D');`),
+  f('fullstack', 'Keys in React lists', 'Don’t use the index for reorderable lists.',
+    'React matches list items between renders by key. If you use the array index and the list is re-sorted or filtered, state and DOM get attached to the wrong item. Use a stable ID from your data.',
+    `{todos.map(t => <Todo key={t.id} todo={t} />)}`),
+  f('fullstack', 'Never build SQL with string concatenation', 'Parameterised queries stop SQL injection.',
+    'User input like  \' OR 1=1 --  can rewrite your query. Placeholders send data separately from the SQL, so it is never executed as code.',
+    `// ❌ db.query("SELECT * FROM users WHERE email = '" + email + "'")
+// ✅
+db.query('SELECT * FROM users WHERE email = $1', [email]);`),
+  f('fullstack', 'Database indexes', 'Fast reads, slower writes.',
+    'Most indexes are B-trees, which turn a full table scan into an O(log n) lookup. Each index adds work on every write. A composite index on (a, b) helps queries filtering on a, or a and b, but not on b alone (the leftmost-prefix rule).'),
+  f('fullstack', 'The N+1 query problem', 'One query becomes a hundred.',
+    'You fetch 100 posts, then loop and fetch each post’s author: that is 101 queries. Use a JOIN, a single WHERE id IN (…) query, or your ORM’s eager loading (include / select_related) to batch it.'),
+  f('fullstack', 'Hash passwords with bcrypt or Argon2', 'Not SHA-256.',
+    'Fast hashes let attackers try billions of guesses per second. Password hashing functions are deliberately slow and salted, so identical passwords hash differently. Never store plaintext or reversible encryption.'),
+  f('fullstack', 'Cookie flags that matter', 'HttpOnly, Secure, SameSite.',
+    'HttpOnly hides the cookie from JavaScript, which limits XSS token theft. Secure sends it only over HTTPS. SameSite=Lax or Strict stops it being sent on most cross-site requests, which blocks many CSRF attacks.'),
+  f('fullstack', 'Anything in the frontend bundle is public', 'Including your API keys.',
+    'Env vars like VITE_* or NEXT_PUBLIC_* are baked into the JS users download. Keep secrets on the server and call third-party APIs from a backend or serverless function.'),
+  f('fullstack', 'Debounce vs throttle', 'Taming noisy events.',
+    'Debounce waits until events stop for X ms, which suits search-as-you-type. Throttle runs at most once every X ms, which suits scroll and resize handlers.',
+    `function debounce(fn, ms) {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), ms);
+  };
+}`),
+  f('fullstack', 'Polling, SSE or WebSockets?', 'Choosing real-time transport.',
+    'Polling is simple but wasteful. Server-Sent Events give one-way server → client streaming over plain HTTP with auto-reconnect. WebSockets are full duplex, which suits chat, games and collaboration. Pick the simplest one that fits.'),
+  f('fullstack', 'Core Web Vitals', 'What "fast" means to Google.',
+    'Good targets: LCP (largest content visible) under 2.5 s, INP (responsiveness to input) under 200 ms, CLS (layout shift) under 0.1. Big wins: optimised images, less JS, reserved space for media and ads.'),
+  f('fullstack', 'ACID transactions', 'All or nothing.',
+    'Atomicity: every statement commits or none do. Consistency: constraints hold. Isolation: concurrent transactions don’t see each other’s partial work. Durability: committed data survives crashes. Wrap multi-step writes like transfers in a transaction.'),
+  f('fullstack', 'Flexbox or Grid?', 'One axis or two.',
+    'Flexbox lays items out along one axis, which suits navbars, toolbars and centering. Grid controls rows and columns together, which suits page layouts and card galleries. They combine well: Grid for the page, Flexbox inside components.'),
+  q('fullstack', 'What does this log?', ['A B C D', 'A D B C', 'A D C B', 'A C D B'], 2,
+    'Sync code first (A, D), then microtasks (C), then the timer (B).', `console.log('A');
+setTimeout(() => console.log('B'));
+Promise.resolve().then(() => console.log('C'));
+console.log('D');`),
+  q('fullstack', 'A logged-in user requests an admin-only page. Correct status?', ['400', '401', '403', '404'], 2,
+    '403: authenticated, but not authorised.'),
+  q('fullstack', 'Which HTTP method is NOT idempotent?', ['GET', 'PUT', 'DELETE', 'POST'], 3,
+    'Repeating a POST can create duplicates.'),
+  q('fullstack', 'Which cookie flag stops JavaScript from reading the cookie?', ['Secure', 'HttpOnly', 'SameSite', 'Domain'], 1,
+    'HttpOnly cookies are invisible to document.cookie.'),
+  q('fullstack', 'Who enforces CORS?', ['The web server', 'The browser', 'The database', 'DNS'], 1,
+    'Servers only send headers; browsers decide whether JS may read the response.'),
+  q('fullstack', 'Composite index on (country, city). Which query can NOT use it efficiently?', ['WHERE country = ?', 'WHERE country = ? AND city = ?', 'WHERE city = ?', 'ORDER BY country, city'], 2,
+    'Leftmost-prefix rule: the index is sorted by country first.'),
 ];

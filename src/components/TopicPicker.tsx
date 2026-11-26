@@ -23,7 +23,10 @@ export function TopicPicker({ selected, onChange }: Props) {
             aria-pressed={on}
           >
             <span className="topic-emoji">{t.emoji}</span>
-            <span className="topic-name">{t.name}</span>
+            <span className="topic-text">
+              <span className="topic-name">{t.name}</span>
+              <span className="topic-blurb">{t.blurb}</span>
+            </span>
             {on && <span className="topic-check">✓</span>}
           </button>
         );
