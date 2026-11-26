@@ -1,0 +1,33 @@
+{
+  "name": "edu-scroll",
+  "version": "0.1.0",
+  "description": "Mobile PWA: Instagram-reels-style scrollable feed of bite-sized lessons on topics you pick.",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host",
+    "icons": "node scripts/make-icons.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaswantsingh09/edu-scroll.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jaswantsingh09/edu-scroll/issues"
+  },
+  "homepage": "https://github.com/jaswantsingh09/edu-scroll#readme",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vite-plugin-pwa": "^0.21.1"
+  },
+  "private": true,
+  "type": "module"
+}
